@@ -46,8 +46,10 @@ $winDll      = Join-Path $repoRoot "build\windows\x64\release\enet6.dll"
 $andArm64    = Join-Path $repoRoot "build\android\arm64-v8a\release\libenet6.so"
 $andArmv7    = Join-Path $repoRoot "build\android\armeabi-v7a\release\libenet6.so"
 $bindings    = Join-Path $repoRoot "binding\cs\ENet6.cs"
+$readme      = Join-Path $repoRoot "package-README.md"
+$license     = Join-Path $repoRoot "LICENSE"
 
-foreach ($f in @($winDll, $andArm64, $andArmv7, $bindings)) {
+foreach ($f in @($winDll, $andArm64, $andArmv7, $bindings, $readme, $license)) {
     if (-not (Test-Path $f)) {
         throw "Missing artifact: $f`nRun the appropriate build script first."
     }
@@ -62,6 +64,10 @@ New-Item -ItemType Directory -Path $outDir | Out-Null
 
 # Bindings.
 Copy-Item $bindings (Join-Path $outDir "ENet6.cs")
+
+# README + LICENSE (shipped at the root of the ENet6 folder; .meta files live in unity-meta/).
+Copy-Item $readme  (Join-Path $outDir "README.md")
+Copy-Item $license (Join-Path $outDir "LICENSE.md")
 
 # Native plugins.
 $pluginsRoot = Join-Path $outDir "Plugins"

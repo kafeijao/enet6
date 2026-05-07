@@ -30,8 +30,10 @@ $outDir   = Join-Path $repoRoot "dist\dotnet\ENet6"
 $winDll   = Join-Path $repoRoot "build\windows\x64\release\enet6.dll"
 $linSo    = Join-Path $repoRoot "build\linux\x86_64\release\libenet6.so"
 $bindings = Join-Path $repoRoot "binding\cs\ENet6.cs"
+$readme   = Join-Path $repoRoot "package-README.md"
+$license  = Join-Path $repoRoot "LICENSE"
 
-foreach ($f in @($winDll, $linSo, $bindings)) {
+foreach ($f in @($winDll, $linSo, $bindings, $readme, $license)) {
     if (-not (Test-Path $f)) {
         throw "Missing artifact: $f`nRun the appropriate build script first."
     }
@@ -42,6 +44,10 @@ New-Item -ItemType Directory -Path $outDir | Out-Null
 
 # Bindings.
 Copy-Item $bindings (Join-Path $outDir "ENet6.cs")
+
+# README + LICENSE (shipped next to the csproj).
+Copy-Item $readme  (Join-Path $outDir "README.md")
+Copy-Item $license (Join-Path $outDir "LICENSE.md")
 
 # Native libs in the standard runtimes/{rid}/native layout.
 $winNativeDir = Join-Path $outDir "runtimes\win-x64\native"
