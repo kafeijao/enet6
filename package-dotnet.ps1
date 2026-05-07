@@ -61,20 +61,21 @@ $csproj = @'
     <Nullable>disable</Nullable>
     <LangVersion>latest</LangVersion>
     <RootNamespace>ENet6</RootNamespace>
-    <AssemblyName>ENet6</AssemblyName>
-    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <AssemblyName>ENet6-CSharp</AssemblyName>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
     <Content Include="runtimes\win-x64\native\enet6.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Pack>true</Pack>
-      <PackagePath>runtimes\win-x64\native\</PackagePath>
+      <Link>enet6.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
     <Content Include="runtimes\linux-x64\native\libenet6.so">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Pack>true</Pack>
-      <PackagePath>runtimes\linux-x64\native\</PackagePath>
+      <Link>libenet6.so</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
