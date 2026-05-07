@@ -4,6 +4,9 @@ bin/*
 build/
 vs*/
 
+# Packaged outputs
+dist/
+
 # Prerequisites
 *.d
 
