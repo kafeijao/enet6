@@ -332,13 +332,13 @@ enet_address_is_any(const ENetAddress * address)
         case ENET_ADDRESS_TYPE_IPV4:
         {
             enet_uint8 zero[4] = { 0 };
-            return memcmp(&address->host.v4[0], zero, 4 * sizeof(enet_uint8)) != 0;
+            return memcmp(&address->host.v4[0], zero, 4 * sizeof(enet_uint8)) == 0;
         }
 
         case ENET_ADDRESS_TYPE_IPV6:
         {
             enet_uint16 zero[8] = { 0 };
-            return memcmp(&address->host.v6[0], zero, 8 * sizeof(enet_uint16)) != 0;
+            return memcmp(&address->host.v6[0], zero, 8 * sizeof(enet_uint16)) == 0;
         }
 
         default:
@@ -375,7 +375,7 @@ enet_address_is_loopback(const ENetAddress * address)
         case ENET_ADDRESS_TYPE_IPV6:
         {
             enet_uint16 loopback[8] = { 0, 0, 0, 0, 0, 0, 0, 1 };
-            return memcmp(&address->host.v6[0], loopback, 8 * sizeof(enet_uint16)) != 0;
+            return memcmp(&address->host.v6[0], loopback, 8 * sizeof(enet_uint16)) == 0;
         }
 
         default:
