@@ -27,7 +27,19 @@ try {
     foreach ($arch in $archs) {
         Write-Host "==> Building Android $arch" -ForegroundColor Cyan
 
-        xmake f -p android -a $arch -k shared -m release --examples=false --ndk="$NdkPath"
+        $configArgs = @(
+            "f", "-p", "android", "-a", $arch, "-k", "shared", "-m", "release",
+            "--examples=false", "--ndk=$NdkPath"
+        )
+
+        # 16KB page alignment is required for 64-bit Android on devices with
+        # 16KB pages (Android 15+, becoming mandatory for new apps in late 2025).
+        # The flag is a no-op for the 32-bit armeabi-v7a target so we scope it.
+        if ($arch -eq "arm64-v8a") {
+            $configArgs += "--ldflags=-Wl,-z,max-page-size=16384"
+        }
+
+        xmake @configArgs
         if ($LASTEXITCODE -ne 0) { throw "xmake config failed for $arch" }
 
         xmake
