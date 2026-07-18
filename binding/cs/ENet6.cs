@@ -985,6 +985,25 @@ namespace ENet6
             }
         }
 
+        /// <summary>Maximum transmission unit advertised when connecting, and used to size outgoing fragments</summary>
+        public uint MTU
+        {
+            get
+            {
+                ThrowIfNotCreated();
+
+                return Native.enet_host_get_mtu(nativeHost);
+            }
+
+            set
+            {
+                ThrowIfNotCreated();
+
+                // Peers copy this when they connect, so it only affects later connections. Native side clamps to 576..4096
+                Native.enet_host_set_mtu(nativeHost, value);
+            }
+        }
+
         /// <summary>Number of currently connected peers.</summary>
         public uint PeersCount
         {
@@ -1967,6 +1986,12 @@ namespace ENet6
 
         [DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
         internal static extern void enet_host_set_checksum_callback(IntPtr host, IntPtr callback);
+
+        [DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern uint enet_host_get_mtu(IntPtr host);
+
+        [DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void enet_host_set_mtu(IntPtr host, uint mtu);
 
         [DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
         internal static extern void enet_host_compress(IntPtr host, ref ENetCompressor compressor);

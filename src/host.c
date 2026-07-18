@@ -571,5 +571,19 @@ void enet_host_set_intercept_callback(ENetHost* host, ENetInterceptCallback call
 void enet_host_set_checksum_callback(ENetHost* host, ENetChecksumCallback callback) {
   host->checksum = callback;
 }
-    
+
+enet_uint32 enet_host_get_mtu(const ENetHost* host) {
+  return host->mtu;
+}
+
+void enet_host_set_mtu(ENetHost* host, enet_uint32 mtu) {
+  if (mtu < ENET_PROTOCOL_MINIMUM_MTU)
+    mtu = ENET_PROTOCOL_MINIMUM_MTU;
+
+  if (mtu > ENET_PROTOCOL_MAXIMUM_MTU)
+    mtu = ENET_PROTOCOL_MAXIMUM_MTU;
+
+  host->mtu = mtu;
+}
+
 /** @} */

@@ -711,6 +711,8 @@ ENET_API enet_uint32 enet_host_get_bytes_received(const ENetHost*);
 ENET_API void enet_host_set_max_duplicate_peers(ENetHost*, enet_uint16);
 ENET_API void enet_host_set_intercept_callback(ENetHost*, ENetInterceptCallback);
 ENET_API void enet_host_set_checksum_callback(ENetHost*, ENetChecksumCallback);
+ENET_API enet_uint32 enet_host_get_mtu(const ENetHost*);
+ENET_API void enet_host_set_mtu(ENetHost*, enet_uint32);
 
 ENET_API enet_uint32 enet_peer_get_id(const ENetPeer*);
 ENET_API int enet_peer_get_ip(const ENetPeer*, char*, size_t);
