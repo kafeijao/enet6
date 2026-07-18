@@ -45,7 +45,7 @@ docker run --rm `
     -v "${repoRoot}:/work" `
     -w /work `
     debian:bookworm-slim `
-    bash -c $inContainer
+    bash -c ($inContainer -replace "`r`n", "`n")
 
 if ($LASTEXITCODE -ne 0) {
     throw "Linux build failed (docker exit $LASTEXITCODE)"
