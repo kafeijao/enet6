@@ -33,6 +33,9 @@
     folder into Assets/ keeps existing references intact and the binaries are
     correctly assigned to Editor/Win64/Android targets without manual setup.
 
+    The armeabi-v7a library still ships but its importer has every platform turned
+    off, since the Android build only targets arm64-v8a.
+
     Run build-windows.ps1 and build-android.ps1 first.
 #>
 
@@ -104,6 +107,15 @@ foreach ($meta in $metas) {
     $target = $meta.FullName.Substring(0, $meta.FullName.Length - 5)
     if (-not (Test-Path $target)) {
         throw "Orphan .meta file (no matching asset/folder): $($meta.FullName)"
+    }
+
+    # Unity 6 rejects a .meta that does not end in a newline, and rewrites CRLF back to LF on import
+    $bytes = [System.IO.File]::ReadAllBytes($meta.FullName)
+    if ($bytes.Length -eq 0 -or $bytes[-1] -ne 0x0A) {
+        throw "Meta file is missing its trailing newline: $($meta.FullName)"
+    }
+    if ($bytes -contains 0x0D) {
+        throw "Meta file uses CRLF line endings, Unity expects LF: $($meta.FullName)"
     }
 }
 

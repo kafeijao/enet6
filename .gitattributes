@@ -1,2 +1,6 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Unity always writes these with LF and rewrites them on import, so checking them out as CRLF
+# would make every export show up as a whole-file change in the consuming Unity project
+unity-meta/** text eol=lf
