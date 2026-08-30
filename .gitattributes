@@ -2,5 +2,9 @@
 * text=auto
 
 # Unity always writes these with LF and rewrites them on import, so checking them out as CRLF
-# would make every export show up as a whole-file change in the consuming Unity project
+# would make every export show up as a whole-file change in the consuming Unity project.
+# This covers everything package-unity.ps1 copies into the package, not just the meta files
 unity-meta/** text eol=lf
+binding/cs/ENet6.cs text eol=lf
+package-README.md text eol=lf
+LICENSE text eol=lf

@@ -109,13 +109,19 @@ foreach ($meta in $metas) {
         throw "Orphan .meta file (no matching asset/folder): $($meta.FullName)"
     }
 
-    # Unity 6 rejects a .meta that does not end in a newline, and rewrites CRLF back to LF on import
+    # Unity 6 rejects a .meta that does not end in a newline
     $bytes = [System.IO.File]::ReadAllBytes($meta.FullName)
     if ($bytes.Length -eq 0 -or $bytes[-1] -ne 0x0A) {
         throw "Meta file is missing its trailing newline: $($meta.FullName)"
     }
-    if ($bytes -contains 0x0D) {
-        throw "Meta file uses CRLF line endings, Unity expects LF: $($meta.FullName)"
+}
+
+# Unity rewrites text assets to LF on import, so anything staged as CRLF lands in the consuming
+# project as a whole-file change. A clone with core.autocrlf=true is the usual way that happens.
+$textAssets = Get-ChildItem -Path $outDir -Recurse -File -Include "*.meta", "*.cs", "*.md", "*.json", "*.asmdef"
+foreach ($asset in $textAssets) {
+    if ([System.IO.File]::ReadAllBytes($asset.FullName) -contains 0x0D) {
+        throw "Staged file uses CRLF line endings, Unity expects LF: $($asset.FullName)"
     }
 }
 
